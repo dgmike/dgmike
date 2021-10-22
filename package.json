@@ -1,0 +1,32 @@
+{
+  "name": "dgmike",
+  "version": "1.0.0",
+  "description": "My main github repository",
+  "main": "index.js",
+  "type": "commonjs",
+  "private": true,
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgmike/dgmike.git"
+  },
+  "keywords": [
+    "personal",
+    "private"
+  ],
+  "author": "Michael <contato@dgmike.com.br>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dgmike/dgmike/issues"
+  },
+  "engines": {
+    "node": "^17.0.1",
+    "npm": "~8.1.0"
+  },
+  "os": [
+    "linux"
+  ],
+  "homepage": "https://github.com/dgmike/dgmike#readme"
+}
