@@ -1,0 +1,34 @@
+<!doctype>
+<html dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title><%= siteSettings.site_title %></title>
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+  <body class="home">
+    <header>
+      <h1>
+        <%= siteSettings.site_title %>
+      </h1>
+      <p>
+        <%= siteSettings.site_description %>
+      </p>
+    </header>
+    <aside>
+      <ul>
+        <%_ mostRecentArticles.objects.forEach((article) => { _%>
+        <li>
+          <a href="/pages/<%= article.slug %>/" title="<%= article.title %>"><%= article.title %></a>
+          <p>
+            <%= article.metadata.headline %>
+          </p>
+          <p class="published_at">
+            Publicado em
+            <time datetime="<%= article.published_at %>"><%= formatDate(article.published_at) %></time>
+          </p>
+        </li>
+        <%_ }) _%>
+      </ul>
+    </aside>
+  </body>
+</html>

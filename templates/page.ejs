@@ -1,0 +1,60 @@
+<!doctype>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= page.title %> | <%= siteSettings.site_title %></title>
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+  <body class="page">
+    <div class="wrapper">
+      <header>
+        <h1>
+          <%= siteSettings.site_title %>
+        </h1>
+        <p>
+          <%= siteSettings.site_description %>
+        </p>
+      </header>
+      <article>
+        <h2><%= page.title %></h2>
+        <p class="published_at">
+          Publicado em
+          <time datetime="<%= page.published_at %>"><%= formatDate(page.published_at) %></time>
+        </p>
+        <%- page.content %>
+
+ <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+      this.page.url = 'https://www.dgmike.com.br/pages/<%= page.slug %>/';
+      this.page.identifier = 'page--<%= page.slug %>';
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://dgmike.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      </article>
+      <aside>
+        <ul>
+          <%_ mostRecentArticles.objects.forEach((article) => { _%>
+          <li>
+            <a href="/pages/<%= article.slug %>/" title="<%= article.title %>"><%= article.title %></a>
+            <p>
+              <%= article.metadata.headline %>
+            </p>
+            <p class="published_at">
+              Publicado em
+              <time datetime="<%= article.published_at %>"><%= formatDate(article.published_at) %></time>
+            </p>
+          </li>
+          <%_ }) _%>
+        </ul>
+      </aside>
+    </div>
+  </body>
+</html>
