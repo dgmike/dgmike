@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="pt-br">
   <head>
     <meta charset="utf-8">
     <title><%= page.title %> | <%= siteSettings.site_title %></title>
@@ -9,7 +9,9 @@
     <div class="wrapper">
       <header>
         <h1>
-          <%= siteSettings.site_title %>
+          <a href="<%= env.BASE_URL %>" title="<%= siteSettings.site_title %>">
+            <%= siteSettings.site_title %>
+          </a>
         </h1>
         <p>
           <%= siteSettings.site_description %>
