@@ -9,15 +9,17 @@ const debugLogger = util.debug('app');
 const formatDate = (dateString) =>
   dayjs(dateString).format('DD/HH/YYYY');
 
-const api = Cosmic();
-const bucket = api.bucket({
-  slug: 'dgmike-production',
-  read_key: 'LZcRbZJk49r12ljjHaLH6dZZT3idoErDhz9fftszeF9Qy18JxO',
-});
-
 const env = {
   BASE_URL: process.env.BASE_URL || '',
+  BUCKET_SLUG: process.env.BUCKET_SLUG || '',
+  BUCKET_KEY: process.env.BUCKET_KEY || '',
 };
+
+const api = Cosmic();
+const bucket = api.bucket({
+  slug: env.BUCKET_SLUG,
+  read_key: env.BUCKET_KEY,
+});
 
 const getSettings = async () => {
   const {
