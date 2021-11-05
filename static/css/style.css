@@ -78,6 +78,41 @@ select {
 }
 
 /* page */
+body {
+  font-family: sans-serif;
+}
+
+aside ul {
+  list-style: none;
+}
+
+aside ul li > a .title {
+  color: #44e;
+  text-decoration: none;
+}
+
+aside ul li > a {
+  text-decoration: none;
+}
+
+aside ul li p.title {
+  font-weight: bold;
+  color: #33a;
+}
+
+aside ul li p.headline,
+aside ul li p.published_at {
+  color: #333;
+  background: #f5f5f5;
+  padding: .5rem;
+  font-size: .8rem;
+}
+
+aside ul li p.published_at {
+  padding-top: 0;
+  color: #555;
+}
+
 .page .wrapper header { grid-area: header; }
 .page .wrapper aside { grid-area: aside; }
 .page .wrapper article { grid-area: article; }

@@ -1,4 +1,4 @@
-<!doctype>
+<!doctype html>
 <html dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -14,21 +14,6 @@
         <%= siteSettings.site_description %>
       </p>
     </header>
-    <aside>
-      <ul>
-        <%_ mostRecentArticles.objects.forEach((article) => { _%>
-        <li>
-          <a href="/pages/<%= article.slug %>/" title="<%= article.title %>"><%= article.title %></a>
-          <p>
-            <%= article.metadata.headline %>
-          </p>
-          <p class="published_at">
-            Publicado em
-            <time datetime="<%= article.published_at %>"><%= formatDate(article.published_at) %></time>
-          </p>
-        </li>
-        <%_ }) _%>
-      </ul>
-    </aside>
+    <%- include('_sidebar.ejs') -%>
   </body>
 </html>

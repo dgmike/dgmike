@@ -1,0 +1,19 @@
+    <aside>
+      <ul>
+        <%_ mostRecentArticles.objects.forEach((article) => { _%>
+        <li>
+          <a href="/pages/<%= article.slug %>/" title="<%= article.title %>">
+            <p class="title"><%= article.title %></p>
+            <p class="headline">
+              <%= article.metadata.headline %>
+            </p>
+            <p class="published_at">
+              Publicado em
+              <time datetime="<%= article.published_at %>"><%= formatDate(article.published_at) %></time>
+            </p>
+          </a>
+        </li>
+        <%_ }) _%>
+      </ul>
+    </aside>
+
