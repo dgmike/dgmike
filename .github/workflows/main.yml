@@ -12,9 +12,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Adjust node version
-        run: nvm install 17.0.1 && nvm use 17.0.1
-      
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+          cache: npm
+
       - name: Install dependencies
         run: npm install
