@@ -15,6 +15,10 @@ const bucket = api.bucket({
   read_key: 'LZcRbZJk49r12ljjHaLH6dZZT3idoErDhz9fftszeF9Qy18JxO',
 });
 
+const env = {
+  BASE_URL: process.env.BASE_URL || '',
+};
+
 const getSettings = async () => {
   const {
     object: {
@@ -56,6 +60,7 @@ const run = async () => {
     siteSettings,
     mostRecentArticles,
     formatDate,
+    env,
   };
   debugLogger(util.inspect(homePageParams, null, Infinity));
 
@@ -66,7 +71,7 @@ const run = async () => {
 
   await Promise.all(dirStructure.map(dir => fsExtra.mkdirp(dir)));
 
-  await fsExtra.ensureSymlink('static', 'dist/static')
+  await fsExtra.copy('static', 'dist/static')
 
   const homePageContent = await ejs.renderFile(`${__dirname}/templates/index.ejs`, homePageParams);
   const homePagePath = 'dist/index.html';
@@ -80,6 +85,7 @@ const run = async () => {
       mostRecentArticles,
       page,
       formatDate,
+      env,
     };
     await fsExtra.mkdirp(`dist/pages/${page.slug}`);
     const pageContent = await ejs.renderFile(`${__dirname}/templates/page.ejs`, pageParams);

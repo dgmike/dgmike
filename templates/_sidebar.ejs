@@ -2,7 +2,7 @@
       <ul>
         <%_ mostRecentArticles.objects.forEach((article) => { _%>
         <li>
-          <a href="/pages/<%= article.slug %>/" title="<%= article.title %>">
+          <a href="<%= env.BASE_URL %>/pages/<%= article.slug %>/" title="<%= article.title %>">
             <p class="title"><%= article.title %></p>
             <p class="headline">
               <%= article.metadata.headline %>
