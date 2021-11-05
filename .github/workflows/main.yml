@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+    branches: 
+    - actions/*
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Adjust node version
+        run: nvm install 17.0.1 && nvm use 17.0.1
+      
+      - name: Install dependencies
+        run: npm install
