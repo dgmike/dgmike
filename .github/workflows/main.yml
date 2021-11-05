@@ -27,6 +27,7 @@ jobs:
         env:
           BUCKET_SLUG: ${{ secrets.BUCKET_SLUG }}
           BUCKET_KEY: ${{ secrets.BUCKET_KEY }}
+          BUCKET_SETTINGS_ID: ${{ secrets.BUCKET_SETTINGS_ID }}
           BASE_URL: ${{ secrets.BASE_URL }}
         run: npm run build
 

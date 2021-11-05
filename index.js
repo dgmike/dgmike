@@ -13,6 +13,7 @@ const env = {
   BASE_URL: process.env.BASE_URL || '',
   BUCKET_SLUG: process.env.BUCKET_SLUG || '',
   BUCKET_KEY: process.env.BUCKET_KEY || '',
+  BUCKET_SETTINGS_ID: process.env.BUCKET_SETTINGS_ID || '',
 };
 
 const api = Cosmic();
@@ -27,7 +28,7 @@ const getSettings = async () => {
       metadata: { configurations },
     },
   } = await bucket.getObject({
-    id: '6172faa111e9500009ad8cb7',
+    id: env.BUCKET_SETTINGS_ID,
     props: 'metadata.configurations'
   });
   return configurations.reduce((acc, {key, value}) => ({ ...acc, [key]: value }), {});
@@ -35,7 +36,7 @@ const getSettings = async () => {
 
 const getArticles = ({ limit = 100, skip = 0, props = 'slug,title,metadata.headline,published_at,locale' } = {}) =>{
   const params = {
-    query: { type: 'articles', locale: 'pt-BR' },
+    query: { type: 'articles' },
     props,
     sort: '-created_at',
     limit,
