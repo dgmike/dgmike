@@ -49,7 +49,7 @@ const getArticles = ({ limit = 100, skip = 0, props = 'slug,title,metadata.headl
 const getMostRecentArticles = () => getArticles({ limit: 10 })
 
 const runOnPages = async (fn, { limit = 1, skip = 0 } = {}) => {
-  const params = { limit, skip, props: 'id,slug,title,published_at,content' }
+  const params = { limit, skip, props: 'id,slug,title,thumbnail,metadata.headline,published_at,content' }
   const data = await getArticles(params);
   data.objects.forEach(fn);
   if ((data.skip || 0) + data.limit < data.total)
@@ -90,6 +90,7 @@ const run = async () => {
       formatDate,
       env,
     };
+    console.info({ pageParams })
     await fsExtra.mkdirp(`dist/pages/${page.slug}`);
     const pageContent = await ejs.renderFile(`${__dirname}/templates/page.ejs`, pageParams);
     const pagePath = `dist/pages/${page.slug}/index.html`;
