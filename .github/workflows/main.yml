@@ -5,7 +5,7 @@ on:
     branches:
     - build
   schedule:
-    - cron:  '0 5,17 * * *'
+    - cron: '0 0 * * *'  # every day at midnight
   workflow_dispatch:
 
 jobs:
