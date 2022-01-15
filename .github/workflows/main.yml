@@ -4,12 +4,9 @@ on:
   push:
     branches:
     - build
-
-on:
   schedule:
     - cron: '0 0 * * *'  # every day at midnight
-
-on: workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   build:
