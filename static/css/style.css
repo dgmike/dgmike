@@ -157,12 +157,24 @@ aside ul li p.published_at {
   grid-template-areas:
     'header  header'
     'article aside';
-  grid-template-rows: 100px auto;
+  grid-template-rows: 150px auto;
   grid-template-columns: auto 320px;
   grid-gap: 10px;
 }
 
-.home .wrapper header, .page .wrapper header { grid-area: header; }
-.home .wrapper aside, .page .wrapper aside { grid-area: aside; }
-.home .wrapper article, .page .wrapper article { grid-area: article; }
+.home .wrapper header, .page .wrapper header {
+  grid-area: header;
+  display: grid;
+  align-content: end;
+  padding-bottom: 1rem;
+}
 
+.home .wrapper aside, .page .wrapper aside { grid-area: aside; }
+
+.home .wrapper article, .page .wrapper article {
+  grid-area: article;
+}
+
+.home .wrapper article {
+  padding-top: 1rem;
+}
