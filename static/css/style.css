@@ -178,3 +178,16 @@ aside ul li p.published_at {
 .home .wrapper article {
   padding-top: 1rem;
 }
+
+.fr-img-caption .fr-img-wrap img {
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.fr-img-caption .fr-inner {
+  color: #444;
+  background: #f5f5f5;
+  display: block;
+  padding: 1rem;
+  font-size: .8rem;
+}
