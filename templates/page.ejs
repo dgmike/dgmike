@@ -20,14 +20,14 @@
       </header>
       <article>
         <h2><%= page.title %></h2>
-        <figure>
-          <img src="<%= page.thumbnail %>" alt="<%= page.excerpt %>" />
-          <figcaption><%= page.metadata.headline %></figcaption>
-        </figure>
         <p class="published_at">
           Publicado em
           <time datetime="<%= page.published_at %>"><%= formatDate(page.published_at) %></time>
         </p>
+        <figure>
+          <img src="<%= page.thumbnail %>" alt="<%= page.excerpt %>" />
+          <figcaption><%= page.metadata.headline %></figcaption>
+        </figure>
         <%- page.content %>
         <%- include('_comments.ejs') -%>
       </article>
