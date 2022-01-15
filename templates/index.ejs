@@ -15,6 +15,24 @@
           <%= siteSettings.site_description %>
         </p>
       </header>
+      <content>
+        <%_ mostRecentArticles.objects.forEach((article) => { _%>
+          <article>
+            <h2 class="title">
+              <a href="<%= env.BASE_URL %>/pages/<%= article.slug %>/" title="<%= article.title %>">
+                <%= article.title %>
+              </a>
+            </h2>
+            <p class="published_at">
+              Publicado em
+              <time datetime="<%= article.published_at %>"><%= formatDate(article.published_at) %></time>
+            </p>
+            <p class="headline">
+              <%= article.metadata.headline %>
+            </p>
+          </article>
+          <%_ }) _%>
+      </content>
       <%- include('_sidebar.ejs') -%>
     </div>
   </body>

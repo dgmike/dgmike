@@ -64,6 +64,7 @@ const run = async () => {
     mostRecentArticles,
     formatDate,
     env,
+    page: 'home',
   };
   debugLogger(util.inspect(homePageParams, null, Infinity));
 

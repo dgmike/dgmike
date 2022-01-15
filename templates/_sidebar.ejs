@@ -4,6 +4,7 @@
         <img src="<%= siteSettings.author_avatar %>" title="<%= siteSettings.author_name %>" alt="<%= siteSettings.author_name %>'s photo" />
         <p><%= siteSettings.author_description %></p>
       </div>
+      <% if (page != 'home') { %>
       <ul>
         <%_ mostRecentArticles.objects.forEach((article) => { _%>
         <li>
@@ -20,5 +21,6 @@
         </li>
         <%_ }) _%>
       </ul>
+      <% } %>
     </aside>
 
