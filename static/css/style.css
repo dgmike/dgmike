@@ -146,6 +146,31 @@ aside ul li p.published_at {
   color: #555;
 }
 
+.page .tags {
+  font-size: .9rem;
+}
+
+.page .tags p {
+  display: inline;
+}
+
+.page .tags ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline;
+}
+
+.page .tags ul li {
+  display: inline;
+  color: #333;
+}
+
+.page .tags ul li:not(:last-of-type)::after {
+  content: ",";
+  display: inline;
+}
+
 .home .wrapper,
 .page .wrapper {
   display: grid;

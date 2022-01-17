@@ -30,6 +30,18 @@
           <figcaption><%= page.metadata.headline %></figcaption>
         </figure>
         <%- page.content %>
+
+        <% if (page.metadata.tags) { %>
+        <div class="tags">
+          <p>Tags:</p>
+          <ul>
+            <% page.metadata.tags.forEach((tag) => { %>
+            <li><%= tag.title %></li>
+            <% }) %>
+          </ul>
+        </div>
+        <% } %>
+
         <%- include('_comments.ejs') -%>
       </article>
       <%- include('_sidebar.ejs') -%>
