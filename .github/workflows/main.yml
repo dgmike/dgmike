@@ -31,7 +31,7 @@ jobs:
           BUCKET_SETTINGS_ID: ${{ secrets.BUCKET_SETTINGS_ID }}
           BASE_URL: ${{ secrets.BASE_URL }}
           CERT_FILE: ${{ secrets.CERT_FILE }}
-          CERT_DATA: ${{ secrets.CERT_DATA }}
+          CERT_VALUE: ${{ secrets.CERT_VALUE }}
         run: npm run build
 
       - name: Deploy 🚀
