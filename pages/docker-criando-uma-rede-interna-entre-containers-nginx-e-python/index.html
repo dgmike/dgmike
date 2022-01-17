@@ -26,48 +26,14 @@
         <h2>Docker: criando uma rede interna entre containers NGINX e python</h2>
         <p class="published_at">
           Publicado em
-          <time datetime="2022-01-17T13:48:03.163Z">17/01/2022</time>
+          <time datetime="2022-01-17T15:16:37.970Z">17/01/2022</time>
         </p>
         <figure>
           <img src="https://imgix.cosmicjs.com/e06e1630-779b-11ec-bfef-718573fe8f91-docker-networking.png" alt="" />
           <figcaption>Conhecendo como funciona o sistema de redes do docker. Neste artigo, demonstro como criar e utilizar uma rede com docker puro.</figcaption>
         </figure>
         <p>Antes de mais nada, este artigo considera que voc&ecirc; j&aacute; tenha o <code>docker</code> instalado e que voc&ecirc; tenha algum conhecimento de terminal/bash para conseguir executar os passos abaixo. Pode ser executado em Windows, Mac ou Linux com suas devidas adapta&ccedil;&otilde;es. Neste artigo estou utilizando <code>ubuntu 20.04.2 LTS</code>. Se um comando estiver rodando em um terminal (como um cont&ecirc;iner), abra um novo terminal para executar o outro comando, simples
-assim.</p><h2 id="criando-um-servidor-python">Criando um servidor python</h2><p>Vamos criar um programa em <code>python</code> para servir uma p&aacute;gina din&acirc;mica. Crie uma pasta com o nome <code>python</code> e crie um arquivo com o nome <code>main.py</code> dentro delac om o seguinte conte&uacute;do (n&atilde;o vou entrar no m&eacute;rito de como voc&ecirc; far&aacute; isso, utilize seu <a href="https://www.nano-editor.org/">editor de texto de prefer&ecirc;ncia</a>):</p><pre><code class="lang-python">import os
-from http import HTTPStatus, server
-import socketserver
-from textwrap import dedent
-
-class Server(server.SimpleHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(HTTPStatus.OK.value, HTTPStatus.OK.phrase)
-        self.send_header(&#39;Content-Type&#39;, &#39;text/html&#39;)
-        self.end_headers()
-
-        self.wfile.write(bytes(dedent(&quot;&quot;&quot;
-            &lt;doctype html&gt;
-            &lt;html&gt;
-                &lt;head&gt;
-                    &lt;meta charset=&quot;utf-8&quot;&gt;
-                    &lt;title&gt;Exemplo&lt;/title&gt;
-                &lt;/head&gt;
-                &lt;body&gt;
-                    &lt;h1&gt;Python&lt;/h1&gt;
-                    &lt;p&gt;&lt;code&gt;1 + 1 = {}&lt;/code&gt;&lt;/p&gt;
-                    &lt;img src=&quot;/images/carnaval.gif&quot; alt=&quot;Imagem de festa de carnaval&quot; /&gt;
-                &lt;/body&gt;
-            &lt;/html&gt;
-        &quot;&quot;&quot;.format(1 + 1)), &quot;utf-8&quot;))
-    def serve_forever(port):
-        socketserver.TCPServer.allow_reuse_address = True
-        socketserver.TCPServer((&#39;&#39;, int(port)), Server).serve_forever()
-
-
-if __name__ == &quot;__main__&quot;:
-    PORT = os.environ.get(&#39;PORT&#39;) or 8000
-    print(&quot;Serving on port %s&quot; % PORT)
-    Server.serve_forever(PORT)
-</code></pre><p>Perceba que foi colocada uma imagem de carnaval ali que n&atilde;o existe. Voltaremosnela a qualquer momento, ela n&atilde;o deve funcionar nesse momento mesmo.</p><p>Agora, rode um container montando o volume do container apontando para essapasta expondo a porta <code>8000</code> e executando o comando <code>python</code> sobre esse arquivo:</p><pre><code class="nohighlight">docker run --rm -ti -v $(pwd)/python:/app -p 8000:8000 --name dinamico python:3-alpine python /app/main.py
+assim.</p><h2 id="criando-um-servidor-python">Criando um servidor python</h2><p>Vamos criar um programa em <code>python</code> para servir uma p&aacute;gina din&acirc;mica. Crie uma pasta com o nome <code>python</code> e crie um arquivo com o nome <code>main.py</code> dentro delac om o seguinte conte&uacute;do (n&atilde;o vou entrar no m&eacute;rito de como voc&ecirc; far&aacute; isso, utilize seu <a href="https://www.nano-editor.org/">editor de texto de prefer&ecirc;ncia</a>):</p><pre class=" language-python"><code class=" language-python"><span class="token keyword">import</span> osfrom http <span class="token keyword">import</span> HTTPStatus<span class="token punctuation">,</span> serverimport socketserverfrom textwrap <span class="token keyword">import</span> dedentclass Server<span class="token punctuation">(</span>server<span class="token punctuation">.</span>SimpleHTTPRequestHandler<span class="token punctuation">)</span><span class="token punctuation">:</span>    <span class="token keyword">def</span> <span class="token function">do_GET</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>        self<span class="token punctuation">.</span>send_response<span class="token punctuation">(</span>HTTPStatus<span class="token punctuation">.</span>OK<span class="token punctuation">.</span>value<span class="token punctuation">,</span> HTTPStatus<span class="token punctuation">.</span>OK<span class="token punctuation">.</span>phrase<span class="token punctuation">)</span>        self<span class="token punctuation">.</span>send_header<span class="token punctuation">(</span><span class="token string">&#39;Content-Type&#39;</span><span class="token punctuation">,</span> <span class="token string">&#39;text/html&#39;</span><span class="token punctuation">)</span>        self<span class="token punctuation">.</span>end_headers<span class="token punctuation">(</span><span class="token punctuation">)</span>        self<span class="token punctuation">.</span>wfile<span class="token punctuation">.</span>write<span class="token punctuation">(</span>bytes<span class="token punctuation">(</span>dedent<span class="token punctuation">(</span><span class="token triple-quoted-string string">&quot;&quot;&quot;            &lt;doctype html&gt;            &lt;html&gt;                &lt;head&gt;                    &lt;meta charset=&quot;utf-8&quot;&gt;                    &lt;title&gt;Exemplo&lt;/title&gt;                &lt;/head&gt;                &lt;body&gt;                    &lt;h1&gt;Python&lt;/h1&gt;                    &lt;p&gt;&lt;code&gt;1 + 1 = {}&lt;/code&gt;&lt;/p&gt;                    &lt;img src=&quot;/images/carnaval.gif&quot; alt=&quot;Imagem de festa de carnaval&quot; /&gt;                &lt;/body&gt;            &lt;/html&gt;        &quot;&quot;&quot;</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;utf-8&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>    <span class="token keyword">def</span> <span class="token function">serve_forever</span><span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">:</span>        socketserver<span class="token punctuation">.</span>TCPServer<span class="token punctuation">.</span>allow_reuse_address <span class="token operator">=</span> <span class="token boolean">True</span>        socketserver<span class="token punctuation">.</span>TCPServer<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">&#39;&#39;</span><span class="token punctuation">,</span> int<span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> Server<span class="token punctuation">)</span><span class="token punctuation">.</span>serve_forever<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">&quot;__main__&quot;</span><span class="token punctuation">:</span>    PORT <span class="token operator">=</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">&#39;PORT&#39;</span><span class="token punctuation">)</span> <span class="token operator">or</span> <span class="token number">8000</span>    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Serving on port %s&quot;</span> <span class="token operator">%</span> PORT<span class="token punctuation">)</span>    Server<span class="token punctuation">.</span>serve_forever<span class="token punctuation">(</span>PORT<span class="token punctuation">)</span></code></pre><p>Perceba que foi colocada uma imagem de carnaval ali que n&atilde;o existe. Voltaremosnela a qualquer momento, ela n&atilde;o deve funcionar nesse momento mesmo.</p><p>Agora, rode um container montando o volume do container apontando para essapasta expondo a porta <code>8000</code> e executando o comando <code>python</code> sobre esse arquivo:</p><pre><code class="nohighlight">docker run --rm -ti -v $(pwd)/python:/app -p 8000:8000 --name dinamico python:3-alpine python /app/main.py
 </code></pre><p>Com isso, ser&aacute; poss&iacute;vel acessar o servidor <code>python</code> atrav&eacute;s do endere&ccedil;o<code><a href="http://localhost:8000">http://localhost:8000</a></code>. Veja que a p&aacute;gina foi acessada, que o conte&uacute;do &eacute; oresultado do <code>1 + 1</code> que foi processado pelo <code>python</code> e a imagem de carnavaln&atilde;o foi trazida.</p><h2 id="criando-um-servidor-estático-nginx">Criando um servidor est&aacute;tico (nginx)</h2><p>Vamos criar uma pasta e colocar dentro dela uma imagem de carnaval (sim, aquela que falamos l&aacute; no servidor python).</p><p>Crie uma pasta com o nome <code>public</code> e coloque uma imagem bem bonita do carnaval.Voc&ecirc; pode usar qualquer imagem vinda do<a href="https://www.google.com/search?q=carnaval+gif&tbm=isch">google images</a>.</p><p>Levante um servidor de arquivos est&aacute;ticos utilizando a imagem <code>nginx:alpine</code> esirva os arquivos que est&atilde;o na pasta <code>public</code> na porta <code>9000</code>.</p><pre><code class="nohighlight">docker run --rm -ti -v $(pwd)/public:/usr/share/nginx/html -p 9000:80 --name estaticos nginx:alpine
 </code></pre><p>Experimente acessar a seguinte rota no seu navegador:<code>http://localhost:9000/carnaval.gif</code>.</p><h2 id="o-problema">O problema</h2><p>At&eacute; este momento, nenhum container consegue &ldquo;enxergar&rdquo; o outro pelo seu<em>hostname</em>, somente pelo IP de cada um. Isto acontece porque eles n&atilde;o est&atilde;oconectados no mesmo <em>network</em>. Experimente acessar de dentro
 dos containers.</p><p>Primeiro, descubra o IP de cada conteiner.</p><pre><code class="nohighlight">docker inspect -f &#39;&#39; estaticos
@@ -105,52 +71,7 @@ e201b67bf15b   rede-massa   bridge    local
 </code></pre><p>Conecte-os utilizando o comando <code>network connect [rede] [container]</code>.</p><pre><code class="nohighlight">docker network connect rede-massa dinamico 
 docker network connect rede-massa estaticos
 </code></pre><p>Para verificar se eles est&atilde;o atrelados, utilize o <code>network inspect [rede]</code> paraverificar.</p><pre><code class="nohighlight">docker network inspect rede-massa
-</code></pre><pre><code class="lang-json">[
-    {
-        &quot;Name&quot;: &quot;rede-massa&quot;,
-        &quot;Id&quot;: &quot;e201b67bf15bdc385b43522da4d1e9358e68c4b0e5eed0542232e1e7d86b8574&quot;,
-        &quot;Created&quot;: &quot;2021-08-13T00:24:30.615556773-03:00&quot;,
-        &quot;Scope&quot;: &quot;local&quot;,
-        &quot;Driver&quot;: &quot;bridge&quot;,
-        &quot;EnableIPv6&quot;: false,
-        &quot;IPAM&quot;: {
-            &quot;Driver&quot;: &quot;default&quot;,
-            &quot;Options&quot;: {},
-            &quot;Config&quot;: [
-                {
-                    &quot;Subnet&quot;: &quot;172.20.0.0/16&quot;,
-                    &quot;Gateway&quot;: &quot;172.20.0.1&quot;
-                }
-            ]
-        },
-        &quot;Internal&quot;: false,
-        &quot;Attachable&quot;: false,
-        &quot;Ingress&quot;: false,
-        &quot;ConfigFrom&quot;: {
-            &quot;Network&quot;: &quot;&quot;
-        },
-        &quot;ConfigOnly&quot;: false,
-        &quot;Containers&quot;: {
-            &quot;0db152ec91ada8675a94b4f318c3ee4eb7d540e2ff55d925c688fcd7b9e7cdcb&quot;: {
-                &quot;Name&quot;: &quot;estaticos&quot;,
-                &quot;EndpointID&quot;: &quot;9be41271013f4df28c64399513bf3eb26a44b9fe46973ab4d7aec949d712c720&quot;,
-                &quot;MacAddress&quot;: &quot;00:00:00:00:00:00&quot;,
-                &quot;IPv4Address&quot;: &quot;172.20.0.3/16&quot;,
-                &quot;IPv6Address&quot;: &quot;&quot;
-            },
-            &quot;cc275ab619c92949bca71e9e04f8e79b4a4e0d8abbfc820818e22e8aed2250de&quot;: {
-                &quot;Name&quot;: &quot;dinamico&quot;,
-                &quot;EndpointID&quot;: &quot;3e0e9ccf570deb8015b4bad7d8d17527164a94ea2179bfa9a40923e700770b6f&quot;,
-                &quot;MacAddress&quot;: &quot;00:00:00:00:00:00&quot;,
-                &quot;IPv4Address&quot;: &quot;172.20.0.2/16&quot;,
-                &quot;IPv6Address&quot;: &quot;&quot;
-            }
-        },
-        &quot;Options&quot;: {},
-        &quot;Labels&quot;: {}
-    }
-]
-</code></pre><p>Tente acessar novamente um cont&ecirc;iner de dentro do outro:</p><pre><code class="nohighlight">docker exec -ti dinamico
+</code></pre><pre class=" language-json"><code class=" language-json"><span class="token punctuation">[</span>    <span class="token punctuation">{</span>        <span class="token property">&quot;Name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;rede-massa&quot;</span><span class="token punctuation">,</span>        <span class="token property">&quot;Id&quot;</span><span class="token operator">:</span> <span class="token string">&quot;e201b67bf15bdc385b43522da4d1e9358e68c4b0e5eed0542232e1e7d86b8574&quot;</span><span class="token punctuation">,</span>        <span class="token property">&quot;Created&quot;</span><span class="token operator">:</span> <span class="token string">&quot;2021-08-13T00:24:30.615556773-03:00&quot;</span><span class="token punctuation">,</span>        <span class="token property">&quot;Scope&quot;</span><span class="token operator">:</span> <span class="token string">&quot;local&quot;</span><span class="token punctuation">,</span>        <span class="token property">&quot;Driver&quot;</span><span class="token operator">:</span> <span class="token string">&quot;bridge&quot;</span><span class="token punctuation">,</span>        <span class="token property">&quot;EnableIPv6&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>        <span class="token property">&quot;IPAM&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>            <span class="token property">&quot;Driver&quot;</span><span class="token operator">:</span> <span class="token string">&quot;default&quot;</span><span class="token punctuation">,</span>            <span class="token property">&quot;Options&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>            <span class="token property">&quot;Config&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>                <span class="token punctuation">{</span>                    <span class="token property">&quot;Subnet&quot;</span><span class="token operator">:</span> <span class="token string">&quot;172.20.0.0/16&quot;</span><span class="token punctuation">,</span>                    <span class="token property">&quot;Gateway&quot;</span><span class="token operator">:</span> <span class="token string">&quot;172.20.0.1&quot;</span>                <span class="token punctuation">}</span>            <span class="token punctuation">]</span>        <span class="token punctuation">}</span><span class="token punctuation">,</span>        <span class="token property">&quot;Internal&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>        <span class="token property">&quot;Attachable&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>        <span class="token property">&quot;Ingress&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>        <span class="token property">&quot;ConfigFrom&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>            <span class="token property">&quot;Network&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span>        <span class="token punctuation">}</span><span class="token punctuation">,</span>        <span class="token property">&quot;ConfigOnly&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>        <span class="token property">&quot;Containers&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>            <span class="token property">&quot;0db152ec91ada8675a94b4f318c3ee4eb7d540e2ff55d925c688fcd7b9e7cdcb&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>                <span class="token property">&quot;Name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;estaticos&quot;</span><span class="token punctuation">,</span>                <span class="token property">&quot;EndpointID&quot;</span><span class="token operator">:</span> <span class="token string">&quot;9be41271013f4df28c64399513bf3eb26a44b9fe46973ab4d7aec949d712c720&quot;</span><span class="token punctuation">,</span>                <span class="token property">&quot;MacAddress&quot;</span><span class="token operator">:</span> <span class="token string">&quot;00:00:00:00:00:00&quot;</span><span class="token punctuation">,</span>                <span class="token property">&quot;IPv4Address&quot;</span><span class="token operator">:</span> <span class="token string">&quot;172.20.0.3/16&quot;</span><span class="token punctuation">,</span>                <span class="token property">&quot;IPv6Address&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span>            <span class="token punctuation">}</span><span class="token punctuation">,</span>            <span class="token property">&quot;cc275ab619c92949bca71e9e04f8e79b4a4e0d8abbfc820818e22e8aed2250de&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>                <span class="token property">&quot;Name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;dinamico&quot;</span><span class="token punctuation">,</span>                <span class="token property">&quot;EndpointID&quot;</span><span class="token operator">:</span> <span class="token string">&quot;3e0e9ccf570deb8015b4bad7d8d17527164a94ea2179bfa9a40923e700770b6f&quot;</span><span class="token punctuation">,</span>                <span class="token property">&quot;MacAddress&quot;</span><span class="token operator">:</span> <span class="token string">&quot;00:00:00:00:00:00&quot;</span><span class="token punctuation">,</span>                <span class="token property">&quot;IPv4Address&quot;</span><span class="token operator">:</span> <span class="token string">&quot;172.20.0.2/16&quot;</span><span class="token punctuation">,</span>                <span class="token property">&quot;IPv6Address&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span>            <span class="token punctuation">}</span>        <span class="token punctuation">}</span><span class="token punctuation">,</span>        <span class="token property">&quot;Options&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>        <span class="token property">&quot;Labels&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>    <span class="token punctuation">}</span><span class="token punctuation">]</span></code></pre><p>Tente acessar novamente um cont&ecirc;iner de dentro do outro:</p><pre><code class="nohighlight">docker exec -ti dinamico
 # / ping -c 2 estaticos
 PING 172.17.0.3 (172.17.0.3): 56 data bytes
 64 bytes from 172.17.0.3: seq=0 ttl=64 time=0.191 ms
@@ -160,27 +81,7 @@ PING 172.17.0.3 (172.17.0.3): 56 data bytes
 2 packets transmitted, 2 packets received, 0% packet loss
 round-trip min/avg/max = 0.121/0.156/0.191 ms
 </code></pre><p>Sucesso! Pode sair do container com o comando <code>exit</code>.</p><h2 id="criando-um-proxy-para-mapear-as-rotas">Criando um proxy para mapear as rotas</h2><p>Por &uacute;ltimo, vamos criar um servidor &ldquo;proxy&rdquo; utilizando a imagem <code>nginx:alpine</code>que ir&aacute; conectar os dois servidores e redirecionar cada requisi&ccedil;&atilde;o para seudevido lugar.</p><p>Crie uma pasta chamada <code>proxy</code> e crie um arquivo de configura&ccedil;&atilde;o do servidor<code>nginx</code> para mapear as rotas dos servidores utilizando o comando <code>proxy_pass</code>para informar que ao tentar acessar a rota <code>/</code>deve
-enviar para o servidor<code>dinamico</code> pela porta <code>8000</code> e ao acessar a rota <code>/images</code> deve enviar para oservidor <code>estaticos</code> na porta <code>80</code>. Aproveitando, utilizamos o comando <code>rewrite</code>para remover a &ldquo;pasta&rdquo; <code>/images</code> da rota, deixando transparente para o cont&ecirc;inerde arquivos est&aacute;ticos (saber express&otilde;es regulares sempre ajuda muito).</p><pre><code class="lang-nginx">worker_processes 1;
-
-http {
-    server {
-        listen 80;
-
-        location / {
-            proxy_pass http://dinamico:8000;
-        }
-
-        location /images {
-            rewrite /images/([^/]+) /$1 break;
-            proxy_pass http://estaticos:80;
-        }
-    }
-}
-
-events {
-    worker_connections  1024;
-}
-</code></pre><p>Utilize a pasta <code>proxy</code> para fazer a configura&ccedil;&atilde;o do <code>nginx</code>. Aproveite para j&aacute;conectar o container na rede no momento de cria&ccedil;&atilde;o (com o atributo <code>--network</code>),assim pode-se economizar
+enviar para o servidor<code>dinamico</code> pela porta <code>8000</code> e ao acessar a rota <code>/images</code> deve enviar para oservidor <code>estaticos</code> na porta <code>80</code>. Aproveitando, utilizamos o comando <code>rewrite</code>para remover a &ldquo;pasta&rdquo; <code>/images</code> da rota, deixando transparente para o cont&ecirc;inerde arquivos est&aacute;ticos (saber express&otilde;es regulares sempre ajuda muito).</p><pre class=" language-nginx"><code class=" language-nginx">worker_processes 1;http {    server {        listen 80;        location / {            proxy_pass http://dinamico:8000;        }        location /images {            rewrite /images/([^/]+) /$1 break;            proxy_pass http://estaticos:80;        }    }}events {    worker_connections  1024;}</code></pre><p>Utilize a pasta <code>proxy</code> para fazer a configura&ccedil;&atilde;o do <code>nginx</code>. Aproveite para j&aacute;conectar o container na rede no momento de cria&ccedil;&atilde;o (com o atributo <code>--network</code>),assim pode-se economizar
 linhas de comando.</p><p>Vamos expor a porta <code>3000</code> para conseguir acessar o proxy.</p><pre><code class="nohighlight">docker run --rm -ti -v $(pwd)/proxy/nginx.conf:/etc/nginx/nginx.conf --network rede-massa -p 3000:80 --name proxy nginx:alpine
 </code></pre><p>Por fim, tente acessar o proxy pela url <code>http://localhost:3000/</code>, e voc&ecirc; ver&aacute; a p&aacute;gina escrita em <code>python</code> e a imagem distribu&iacute;da pelo <code>nginx</code>, todas dispon&iacute;veis pelo <code>proxy</code>.</p><p>Basicamente, foi isto o que foi feito:</p><pre><code class="nohighlight">                                       .------------------------- rede-massa ---------------------------.
                                        |                                                                |
@@ -249,6 +150,10 @@ docker network rm [rede]                     # apaga uma rede
             
             <li>Docker</li>
             
+            <li>Tutoriais</li>
+            
+            <li>Python</li>
+            
           </ul>
         </div>
         
@@ -285,7 +190,7 @@ docker network rm [rede]                     # apaga uma rede
             </p>
             <p class="published_at">
               Publicado em
-              <time datetime="2022-01-17T13:48:03.163Z">17/01/2022</time>
+              <time datetime="2022-01-17T15:16:37.970Z">17/01/2022</time>
             </p>
           </a>
         </li>
@@ -297,7 +202,7 @@ docker network rm [rede]                     # apaga uma rede
             </p>
             <p class="published_at">
               Publicado em
-              <time datetime="2022-01-15T23:06:08.185Z">15/01/2022</time>
+              <time datetime="2022-01-17T15:38:59.515Z">17/01/2022</time>
             </p>
           </a>
         </li>
