@@ -76,6 +76,8 @@ const run = async () => {
     'dist/.well-known/acme-challenge/',
   ];
 
+  await fsExtra.outputFile('dist/.nojekyll', '');
+
   console.info(`creating certificate file on dist/.well-known/acme-challenge/${env.CERT_FILE}`)
   await fsExtra.outputFile(`dist/.well-known/acme-challenge/${env.CERT_FILE}`, env.CERT_VALUE);
 
