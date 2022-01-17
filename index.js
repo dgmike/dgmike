@@ -7,7 +7,7 @@ const fsExtra = require('fs-extra');
 const debugLogger = util.debug('app');
 
 const formatDate = (dateString) =>
-  dayjs(dateString).format('DD/HH/YYYY');
+  dayjs(dateString).format('DD/MM/YYYY');
 
 const env = {
   BASE_URL: process.env.BASE_URL || '',
