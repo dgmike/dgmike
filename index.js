@@ -73,10 +73,11 @@ const run = async () => {
   const dirStructure = [
     'dist',
     'dist/pages',
-    'dist/.well-known/acme-challenge/'
+    'dist/.well-known/acme-challenge/',
   ];
 
-  await fsExtra.outputFile(env.CERT_FILE, env.CERT_VALUE);
+  debugLogger(`creating certificate file on dist/.well-known/acme-challenge/${env.CERT_FILE}`)
+  await fsExtra.outputFile(`dist/.well-known/acme-challenge/${env.CERT_FILE}`, env.CERT_VALUE);
 
   await Promise.all(dirStructure.map(dir => fsExtra.mkdirp(dir)));
 
