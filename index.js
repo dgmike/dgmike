@@ -84,7 +84,8 @@ const run = async () => {
   await Promise.all(dirStructure.map(dir => fsExtra.mkdirp(dir)));
 
   await fsExtra.copy('static', 'dist/static')
-  await fsExtra.copy('static/favicon.ico', 'dist/favicon.ico')
+  await fsExtra.copy('static/favicon.ico', 'dist/')
+  await fsExtra.copy('static/robots.txt', 'dist/')
 
   const homePageContent = await ejs.renderFile(`${__dirname}/templates/index.ejs`, homePageParams);
   const homePagePath = 'dist/index.html';
