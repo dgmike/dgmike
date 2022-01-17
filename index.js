@@ -14,6 +14,8 @@ const env = {
   BUCKET_SLUG: process.env.BUCKET_SLUG || '',
   BUCKET_KEY: process.env.BUCKET_KEY || '',
   BUCKET_SETTINGS_ID: process.env.BUCKET_SETTINGS_ID || '',
+  CERT_FILE: process.env.CERT_FILE || 'cert',
+  CERT_VALUE: process.env.CERT_VALUE || '',
 };
 
 const api = Cosmic();
@@ -74,7 +76,7 @@ const run = async () => {
     'dist/.well-known/acme-challenge/'
   ];
 
-  await fsExtra.outputFile(process.env.CERT_FILE, process.env.CERT_VALUE);
+  await fsExtra.outputFile(env.CERT_FILE, env.CERT_VALUE);
 
   await Promise.all(dirStructure.map(dir => fsExtra.mkdirp(dir)));
 
