@@ -71,7 +71,10 @@ const run = async () => {
   const dirStructure = [
     'dist',
     'dist/pages',
+    'dist/.well-known/acme-challenge/'
   ];
+
+  await fsExtra.outputFile(process.env.CERT_FILE, process.env.CERT_VALUE);
 
   await Promise.all(dirStructure.map(dir => fsExtra.mkdirp(dir)));
 
