@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-br">
   <head>
+    <%- include('_header_tagmanager.ejs.ejs') -%>
     <meta charset="utf-8">
     <title><%= page.title %> | <%= siteSettings.site_title %></title>
     <link rel="stylesheet" href="<%= env.BASE_URL %>/static/css/style.css">
@@ -8,6 +9,7 @@
     <%- include('_favicon.ejs') -%>
   </head>
   <body class="page">
+    <%- include('_body_tagmanager.ejs.ejs') -%>
     <div class="wrapper">
       <header>
         <h1>
