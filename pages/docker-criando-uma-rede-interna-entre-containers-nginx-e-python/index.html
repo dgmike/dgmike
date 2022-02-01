@@ -41,44 +41,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h2>Docker: criando uma rede interna entre containers NGINX e python</h2>
         <p class="published_at">
           Publicado em
-          <time datetime="2022-01-28T12:50:57.670Z">28/01/2022</time>
+          <time datetime="2022-02-01T12:37:26.593Z">01/02/2022</time>
         </p>
         <figure>
           <img src="https://imgix.cosmicjs.com/e06e1630-779b-11ec-bfef-718573fe8f91-docker-networking.png" alt="" />
           <figcaption>Conhecendo como funciona o sistema de redes do docker. Neste artigo, demonstro como criar e utilizar uma rede com docker puro.</figcaption>
         </figure>
-        <p>Antes de mais nada, este artigo considera que voc&ecirc; j&aacute; tenha o <code>docker</code> instalado e que voc&ecirc; tenha algum conhecimento de terminal/bash para conseguir executar os passos abaixo. Pode ser executado em Windows, Mac ou Linux com suas devidas adapta&ccedil;&otilde;es. Neste artigo estou utilizando <code>ubuntu 20.04.2 LTS</code>. Se um comando estiver rodando em um terminal (como um cont&ecirc;iner), abra um novo terminal para executar o outro comando, simples assim.</p><h2 id="criando-um-servidor-python">Criando um servidor python</h2><p>Vamos criar um programa em <code>python</code> para servir uma p&aacute;gina din&acirc;mica. Crie uma pasta com o nome <code>python</code> e crie um arquivo com o nome <code>main.py</code> dentro delac om o seguinte conte&uacute;do (n&atilde;o vou entrar no m&eacute;rito de como voc&ecirc; far&aacute; isso, utilize seu <a href="https://www.nano-editor.org/">editor de texto de prefer&ecirc;ncia</a>):</p><pre class="  language-python"><code class="  language-python"><span class="token keyword">import</span> os <span class="token keyword">from</span> http</code>
-<code class="  language-python"><span class="token keyword">import</span> HTTPStatus<span class="token punctuation">,</span> serverimport socketserver <span class="token keyword">from</span> textwrap</code>
-<code class="  language-python"><span class="token keyword">import</span> dedentclass</code>
+        <p>Antes de mais nada, este artigo considera que voc&ecirc; j&aacute; tenha o <code>docker</code> instalado e que voc&ecirc; tenha algum conhecimento de terminal/bash para conseguir executar os passos abaixo. Pode ser executado em Windows, Mac ou Linux com suas devidas adapta&ccedil;&otilde;es. Neste artigo estou utilizando <code>ubuntu 20.04.2 LTS</code>. Se um comando estiver rodando em um terminal (como um cont&ecirc;iner), abra um novo terminal para executar o outro comando, simples assim.</p><h2 id="criando-um-servidor-python">Criando um servidor python</h2><p>Vamos criar um programa em <code>python</code> para servir uma p&aacute;gina din&acirc;mica. Crie uma pasta com o nome <code>python</code> e crie um arquivo com o nome <code>main.py</code> dentro delac om o seguinte conte&uacute;do (n&atilde;o vou entrar no m&eacute;rito de como voc&ecirc; far&aacute; isso, utilize seu <a href="https://www.nano-editor.org/">editor de texto de prefer&ecirc;ncia</a>):</p><pre><code>import os from http
+import HTTPStatus, serverimport socketserver from textwrap
+import dedentclass
 
-<code class="  language-python">Server<span class="token punctuation">(</span>server<span class="token punctuation">.</span>SimpleHTTPRequestHandler<span class="token punctuation">)</span><span class="token punctuation">:</span></code>
-<code class="  language-python">    <span class="token keyword">def</span> <span class="token function">do_GET</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span></code>
-<code class="  language-python">        self<span class="token punctuation">.</span>send_response<span class="token punctuation">(</span>HTTPStatus<span class="token punctuation">.</span>OK<span class="token punctuation">.</span>value<span class="token punctuation">,</span> HTTPStatus<span class="token punctuation">.</span>OK<span class="token punctuation">.</span>phrase<span class="token punctuation">)</span></code>
-<code class="  language-python">        self<span class="token punctuation">.</span>send_header<span class="token punctuation">(</span><span class="token string">&#39;Content-Type&#39;</span><span class="token punctuation">,</span> <span class="token string">&#39;text/html&#39;</span><span class="token punctuation">)</span></code>
-<code class="  language-python">        self<span class="token punctuation">.</span>end_headers<span class="token punctuation">(</span><span class="token punctuation">)</span></code>
-<code class="  language-python">        self<span class="token punctuation">.</span>wfile<span class="token punctuation">.</span>write<span class="token punctuation">(</span>bytes<span class="token punctuation">(</span>dedent<span class="token punctuation">(</span><span class="token string">&quot;&quot;</span>&quot;</code>
-<code class="  language-python">            <span class="token operator">&lt;</span>doctype html<span class="token operator">&gt;</span></code>
-<code class="  language-python">            <span class="token operator">&lt;</span>html<span class="token operator">&gt;</span></code>
-<code class="  language-python">                <span class="token operator">&lt;</span>head<span class="token operator">&gt;</span></code>
-<code class="  language-python">                    <span class="token operator">&lt;</span>meta charset<span class="token operator">=</span><span class="token string">&quot;utf-8&quot;</span><span class="token operator">&gt;</span></code>
-<code class="  language-python">                    <span class="token operator">&lt;</span>title<span class="token operator">&gt;</span>Exemplo<span class="token operator">&lt;</span><span class="token operator">/</span>title<span class="token operator">&gt;</span></code>
-<code class="  language-python">                <span class="token operator">&lt;</span><span class="token operator">/</span>head<span class="token operator">&gt;</span></code>
-<code class="  language-python">                <span class="token operator">&lt;</span>body<span class="token operator">&gt;</span></code>
-<code class="  language-python">                    <span class="token operator">&lt;</span>h1<span class="token operator">&gt;</span>Python<span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">&gt;</span></code>
-<code class="  language-python">                    <span class="token operator">&lt;</span>p<span class="token operator">&gt;</span><span class="token operator">&lt;</span>code<span class="token operator">&gt;</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>code<span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">&gt;</span></code>
-<code class="  language-python">                    <span class="token operator">&lt;</span>img src<span class="token operator">=</span><span class="token string">&quot;/images/carnaval.gif&quot;</span> alt<span class="token operator">=</span><span class="token string">&quot;Imagem de festa de carnaval&quot;</span> <span class="token operator">/</span><span class="token operator">&gt;</span></code>
-<code class="  language-python">                <span class="token operator">&lt;</span><span class="token operator">/</span>body<span class="token operator">&gt;</span></code>
-<code class="  language-python">            <span class="token operator">&lt;</span><span class="token operator">/</span>html<span class="token operator">&gt;</span></code>
-<code class="  language-python">        <span class="token string">&quot;&quot;</span><span class="token string">&quot;.format(1 + 1)), &quot;</span>utf<span class="token number">-8</span>&quot;<span class="token punctuation">)</span><span class="token punctuation">)</span></code>
+Server(server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(HTTPStatus.OK.value, HTTPStatus.OK.phrase)
+        self.send_header(&#39;Content-Type&#39;, &#39;text/html&#39;)
+        self.end_headers()
+        self.wfile.write(bytes(dedent(&quot;&quot;&quot;
+            &lt;!doctype html&gt;
+            &lt;html&gt;
+                &lt;head&gt;
+                    &lt;meta charset=&quot;utf-8&quot;&gt;
+                    &lt;title&gt;Exemplo&lt;/title&gt;
+                &lt;/head&gt;
+                &lt;body&gt;
+                    &lt;h1&gt;Python&lt;/h1&gt;
+                    &lt;p&gt;&lt;code&gt;1 + 1 = {}&lt;/code&gt;&lt;/p&gt;
+                    &lt;img src=&quot;/images/carnaval.gif&quot; alt=&quot;Imagem de festa de carnaval&quot; /&gt;
+                &lt;/body&gt;
+            &lt;/html&gt;
+        &quot;&quot;&quot;.format(1 + 1)), &quot;utf-8&quot;))
 
-<code class="  language-python">    <span class="token keyword">def</span> <span class="token function">serve_forever</span><span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">:</span></code>
-<code class="  language-python">        socketserver<span class="token punctuation">.</span>TCPServer<span class="token punctuation">.</span>allow_reuse_address <span class="token operator">=</span> <span class="token boolean">True</span></code>
-<code class="  language-python">        socketserver<span class="token punctuation">.</span>TCPServer<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">&#39;&#39;</span><span class="token punctuation">,</span> int<span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> Server<span class="token punctuation">)</span><span class="token punctuation">.</span>serve_forever<span class="token punctuation">(</span><span class="token punctuation">)</span></code>
+    def serve_forever(port):
+        socketserver.TCPServer.allow_reuse_address = True
+        socketserver.TCPServer((&#39;&#39;, int(port)), Server).serve_forever()
 
-<code class="  language-python"><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">&quot;__main__&quot;</span><span class="token punctuation">:</span></code>
-<code class="  language-python">    PORT <span class="token operator">=</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">&#39;PORT&#39;</span><span class="token punctuation">)</span> <span class="token operator">or</span> <span class="token number">8000</span></code>
-<code class="  language-python">    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">&quot;Serving on port %s&quot;</span> <span class="token operator">%</span> PORT<span class="token punctuation">)</span></code>
-<code class="  language-python">    Server<span class="token punctuation">.</span>serve_forever<span class="token punctuation">(</span>PORT<span class="token punctuation">)</span></code></pre><p>Perceba que foi colocada uma imagem de carnaval ali que n&atilde;o existe. Voltaremosnela a qualquer momento, ela n&atilde;o deve funcionar nesse momento mesmo.</p><p>Agora, rode um container montando o volume do container apontando para essapasta expondo a porta <code>8000</code> e executando o comando <code>python</code> sobre esse arquivo:</p><pre><code class="nohighlight">docker run --rm -ti -v $(pwd)/python:/app -p 8000:8000 --name dinamico python:3-alpine python /app/main.py
+if __name__ == &quot;__main__&quot;:
+    PORT = os.environ.get(&#39;PORT&#39;) or 8000
+    print(&quot;Serving on port %s&quot; % PORT)
+    Server.serve_forever(PORT)</code></pre><p>Perceba que foi colocada uma imagem de carnaval ali que n&atilde;o existe. Voltaremosnela a qualquer momento, ela n&atilde;o deve funcionar nesse momento mesmo.</p><p>Agora, rode um container montando o volume do container apontando para essapasta expondo a porta <code>8000</code> e executando o comando <code>python</code> sobre esse arquivo:</p><pre><code class="nohighlight">docker run --rm -ti -v $(pwd)/python:/app -p 8000:8000 --name dinamico python:3-alpine python /app/main.py
 </code></pre><p>Com isso, ser&aacute; poss&iacute;vel acessar o servidor <code>python</code> atrav&eacute;s do endere&ccedil;o<code><a href="http://localhost:8000">http://localhost:8000</a></code>. Veja que a p&aacute;gina foi acessada, que o conte&uacute;do &eacute; oresultado do <code>1 + 1</code> que foi processado pelo <code>python</code> e a imagem de carnavaln&atilde;o foi trazida.</p><h2 id="criando-um-servidor-estático-nginx">Criando um servidor est&aacute;tico (nginx)</h2><p>Vamos criar uma pasta e colocar dentro dela uma imagem de carnaval (sim, aquela que falamos l&aacute; no servidor python).</p><p>Crie uma pasta com o nome <code>public</code> e coloque uma imagem bem bonita do carnaval.Voc&ecirc; pode usar qualquer imagem vinda do<a href="https://www.google.com/search?q=carnaval+gif&tbm=isch">google images</a>.</p><p>Levante um servidor de arquivos est&aacute;ticos utilizando a imagem <code>nginx:alpine</code> esirva os arquivos que est&atilde;o na pasta <code>public</code> na porta <code>9000</code>.</p><pre><code class="nohighlight">docker run --rm -ti -v $(pwd)/public:/usr/share/nginx/html -p 9000:80 --name estaticos nginx:alpine
 </code></pre><p>Experimente acessar a seguinte rota no seu navegador:<code>http://localhost:9000/carnaval.gif</code>.</p><h2 id="o-problema">O problema</h2><p>At&eacute; este momento, nenhum container consegue &ldquo;enxergar&rdquo; o outro pelo seu<em>hostname</em>, somente pelo IP de cada um. Isto acontece porque eles n&atilde;o est&atilde;oconectados no mesmo <em>network</em>. Experimente acessar de dentro
 dos containers.</p><p>Primeiro, descubra o IP de cada conteiner.</p><pre><code class="nohighlight">docker inspect -f &#39;&#39; estaticos
@@ -172,19 +172,19 @@ round-trip min/avg/max = 0.121/0.156/0.191 ms
 </code></pre><p>Sucesso! Pode sair do container com o comando <code>exit</code>.</p><h2 id="criando-um-proxy-para-mapear-as-rotas">Criando um proxy para mapear as rotas</h2><p>Por &uacute;ltimo, vamos criar um servidor &ldquo;proxy&rdquo; utilizando a imagem <code>nginx:alpine</code>que ir&aacute; conectar os dois servidores e redirecionar cada requisi&ccedil;&atilde;o para seudevido lugar.</p><p>Crie uma pasta chamada <code>proxy</code> e crie um arquivo de configura&ccedil;&atilde;o do servidor<code>nginx</code> para mapear as rotas dos servidores utilizando o comando <code>proxy_pass</code>para informar que ao tentar acessar a rota <code>/</code>deve
 enviar para o servidor<code>dinamico</code> pela porta <code>8000</code> e ao acessar a rota <code>/images</code> deve enviar para oservidor <code>estaticos</code> na porta <code>80</code>. Aproveitando, utilizamos o comando <code>rewrite</code>para remover a &ldquo;pasta&rdquo; <code>/images</code> da rota, deixando transparente para o cont&ecirc;inerde arquivos est&aacute;ticos (saber express&otilde;es regulares sempre ajuda muito).</p><pre class="  language-nginx"><code class="  language-nginx">worker_processes 1;</code>
 <code class="  language-nginx">http {</code>
-<code class="  language-nginx">    server {</code>
-<code class="  language-nginx">        listen 80;</code>
-<code class="  language-nginx">        location / {</code>
-<code class="  language-nginx">            proxy_pass http://dinamico:8000;</code>
-<code class="  language-nginx">        }</code>
-<code class="  language-nginx">        location /images {</code>
-<code class="  language-nginx">            rewrite /images/([^/]+) /$1 break;</code>
-<code class="  language-nginx">            proxy_pass http://estaticos:80;</code>
-<code class="  language-nginx">        }</code>
-<code class="  language-nginx">    }</code>
+<code class="  language-nginx">    server {</code>
+<code class="  language-nginx">        listen 80;</code>
+<code class="  language-nginx">        location / {</code>
+<code class="  language-nginx">            proxy_pass http://dinamico:8000;</code>
+<code class="  language-nginx">        }</code>
+<code class="  language-nginx">        location /images {</code>
+<code class="  language-nginx">            rewrite /images/([^/]+) /$1 break;</code>
+<code class="  language-nginx">            proxy_pass http://estaticos:80;</code>
+<code class="  language-nginx">        }</code>
+<code class="  language-nginx">    }</code>
 <code class="  language-nginx">}</code>
 <code class="  language-nginx">events {</code>
-<code class="  language-nginx">    worker_connections  1024;</code>
+<code class="  language-nginx">    worker_connections  1024;</code>
 <code class="  language-nginx">}</code></pre><p>Utilize a pasta <code>proxy</code> para fazer a configura&ccedil;&atilde;o do <code>nginx</code>. Aproveite para j&aacute;conectar o container na rede no momento de cria&ccedil;&atilde;o (com o atributo <code>--network</code>),assim pode-se economizar
 linhas de comando.</p><p>Vamos expor a porta <code>3000</code> para conseguir acessar o proxy.</p><pre><code class="nohighlight">docker run --rm -ti -v $(pwd)/proxy/nginx.conf:/etc/nginx/nginx.conf --network rede-massa -p 3000:80 --name proxy nginx:alpine
 </code></pre><p>Por fim, tente acessar o proxy pela url <code>http://localhost:3000/</code>, e voc&ecirc; ver&aacute; a p&aacute;gina escrita em <code>python</code> e a imagem distribu&iacute;da pelo <code>nginx</code>, todas dispon&iacute;veis pelo <code>proxy</code>.</p><p>Basicamente, foi isto o que foi feito:</p><pre><code class="nohighlight">                                       .------------------------- rede-massa ---------------------------.
@@ -287,18 +287,6 @@ docker network rm [rede]                     # apaga uma rede
       
       <ul>
         <li>
-          <a href="/pages/docker-criando-uma-rede-interna-entre-containers-nginx-e-python-0dd52da0-835b-11ec-8845-196bb573c708/" title="Docker: criando uma rede interna entre containers NGINX e python (Copy)">
-            <p class="title">Docker: criando uma rede interna entre containers NGINX e python (Copy)</p>
-            <p class="headline">
-              Conhecendo como funciona o sistema de redes do docker. Neste artigo, demonstro como criar e utilizar uma rede com docker puro.
-            </p>
-            <p class="published_at">
-              Publicado em
-              <time datetime="2022-02-01T12:35:10.021Z">01/02/2022</time>
-            </p>
-          </a>
-        </li>
-        <li>
           <a href="/pages/docker-criando-uma-rede-interna-entre-containers-nginx-e-python/" title="Docker: criando uma rede interna entre containers NGINX e python">
             <p class="title">Docker: criando uma rede interna entre containers NGINX e python</p>
             <p class="headline">
@@ -306,7 +294,7 @@ docker network rm [rede]                     # apaga uma rede
             </p>
             <p class="published_at">
               Publicado em
-              <time datetime="2022-01-28T12:50:57.670Z">28/01/2022</time>
+              <time datetime="2022-02-01T12:37:26.593Z">01/02/2022</time>
             </p>
           </a>
         </li>
