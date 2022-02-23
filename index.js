@@ -87,7 +87,7 @@ const run = async () => {
   const rootCopyFiles = [
     'favicon.ico',
     'robots.txt',
-    'sitemap.txt',
+    'sitemap.xml',
   ];
 
   await Promise.all(rootCopyFiles.map(file => fsExtra.copy(`static/${file}`, `dist/${file}`)))
