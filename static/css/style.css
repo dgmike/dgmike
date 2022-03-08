@@ -185,6 +185,23 @@ aside ul li p.published_at {
   grid-gap: 10px;
 }
 
+@media screen and (max-width: 768px){
+  .home .wrapper,
+  .page .wrapper {
+    width: 100%;
+    grid-template-areas: 
+      'header'
+      'article'
+      'aside';
+    grid-template-columns: auto;
+  }
+  .home .wrapper pre,
+  .page .wrapper pre {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
 .home .wrapper header, .page .wrapper header {
   grid-area: header;
   display: grid;
