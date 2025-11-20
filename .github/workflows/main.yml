@@ -30,12 +30,21 @@ jobs:
           CERT_VALUE: ${{ secrets.CERT_VALUE }}
         run: npm run build
 
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy 🚀
         uses: actions/deploy-pages@v4
